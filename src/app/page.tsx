@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { Terminal, Info, Braces, MessageSquare } from "lucide-react";
 import { Footer } from "@/components/Footer";
 import { TerminalWindow } from "@/components/TerminalWindow";
@@ -47,9 +48,20 @@ export default function HomePage() {
     <div className="bg-background-light dark:bg-background-dark text-gray-900 dark:text-gray-100 font-mono transition-colors duration-300 min-h-screen flex flex-col">
       <Header />
 
-      <main className="flex-grow pt-24 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+      <main className="flex-grow pt-24 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full relative">
         {/* Hero Section */}
-        <div className="flex flex-col items-center justify-center min-h-[70vh] text-center space-y-8">
+        <div className="flex flex-col items-center justify-center min-h-[70vh] text-center space-y-8 relative z-10">
+          {/* Hero Background Image */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] -z-10 opacity-30 dark:opacity-40 pointer-events-none">
+            <Image
+              src="/hero-abstract.svg"
+              alt="Abstract Tech Background"
+              fill
+              className="object-contain"
+              priority
+            />
+          </div>
+
           <div className="inline-block relative">
             <h1 className="text-4xl md:text-7xl font-bold tracking-tight mb-2">
               <span className="text-gray-400 dark:text-gray-600">
@@ -109,32 +121,46 @@ export default function HomePage() {
             </h2>
             <div className="h-px w-full bg-gradient-to-r from-gray-200 dark:from-gray-800 to-transparent"></div>
           </div>
-          <div className="prose dark:prose-invert max-w-none font-mono text-sm md:text-base leading-relaxed">
-            <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-4">
-              ## About Us
-            </h3>
-            <p className="mb-4 text-gray-600 dark:text-gray-300">
-              At RevOrgs, we are more than just coders; we are architects of the
-              digital web. Based in Eastern Europe, we have established ourselves
-              as a premier source for{" "}
-              <strong>Moldova web development</strong>. Our team understands that
-              modern businesses require robust, scalable, and fast digital
-              solutions.
-            </p>
-            <p className="mb-4 text-gray-600 dark:text-gray-300">
-              We pride ourselves on being{" "}
-              <strong>SPA experts</strong> (Single Page Application), crafting
-              seamless user journeys that feel like native apps. Whether you need
-              a dashboard, a complex e-commerce platform, or a corporate portal,
-              our proficiency ensures top-tier performance.
-            </p>
-            <p className="text-gray-600 dark:text-gray-300">
-              As dedicated{" "}
-              <strong>Next.js specialists</strong>, we leverage server-side
-              rendering and static site generation to boost your SEO and load
-              times. Our commitment to clean code and modern architecture makes
-              us the ideal partner for your next ambitious project.
-            </p>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="prose dark:prose-invert max-w-none font-mono text-sm md:text-base leading-relaxed order-2 lg:order-1">
+              <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-4">
+                ## About Us
+              </h3>
+              <p className="mb-4 text-gray-600 dark:text-gray-300">
+                At RevOrgs, we are more than just coders; we are architects of the
+                digital web. Based in Eastern Europe, we have established ourselves
+                as a premier source for{" "}
+                <strong>Moldova web development</strong>. Our team understands that
+                modern businesses require robust, scalable, and fast digital
+                solutions.
+              </p>
+              <p className="mb-4 text-gray-600 dark:text-gray-300">
+                We pride ourselves on being{" "}
+                <strong>SPA experts</strong> (Single Page Application), crafting
+                seamless user journeys that feel like native apps. Whether you need
+                a dashboard, a complex e-commerce platform, or a corporate portal,
+                our proficiency ensures top-tier performance.
+              </p>
+              <p className="text-gray-600 dark:text-gray-300">
+                As dedicated{" "}
+                <strong>Next.js specialists</strong>, we leverage server-side
+                rendering and static site generation to boost your SEO and load
+                times. Our commitment to clean code and modern architecture makes
+                us the ideal partner for your next ambitious project.
+              </p>
+            </div>
+
+            <div className="order-1 lg:order-2 flex justify-center">
+              <div className="relative w-full max-w-md aspect-[4/3]">
+                <Image
+                  src="/about-illustration.svg"
+                  alt="RevOrgs Team Collaboration"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+            </div>
           </div>
         </section>
 
@@ -337,6 +363,6 @@ export default function HomePage() {
       </div>
 
       <Footer />
-    </div>
+    </div >
   );
 }
