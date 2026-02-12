@@ -1,4 +1,5 @@
-import { createServerClient } from "@supabase/ssr";
+// @ts-ignore
+import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { type NextRequest, NextResponse } from "next/server";
 
@@ -14,7 +15,7 @@ export async function POST(req: NextRequest) {
                     return cookieStore.getAll();
                 },
                 setAll(cookiesToSet) {
-                    cookiesToSet.forEach(({ name, value, options }) =>
+                    cookiesToSet.forEach(({ name, value, options }: { name: string; value: string; options: CookieOptions }) =>
                         cookieStore.set(name, value, options)
                     );
                 },

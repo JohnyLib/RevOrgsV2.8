@@ -2,10 +2,10 @@
 
 import { supabase } from "@/lib/supabase";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { AlertCircle, Mail, Lock, Loader2 } from "lucide-react";
 
-export default function LoginPage() {
+function LoginForm() {
     const searchParams = useSearchParams();
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
@@ -215,5 +215,26 @@ export default function LoginPage() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export default function LoginPage() {
+    return (
+        <Suspense fallback={
+            <div className="min-h-screen grid lg:grid-cols-2">
+                <div className="hidden lg:flex flex-col justify-between p-12 bg-gray-900 border-r border-gray-800">
+                    <div>
+                        <div className="font-mono text-2xl font-bold text-white mb-8">
+                            <span className="text-code-green">&gt;</span> RevOrgs<span className="animate-blink">_</span>
+                        </div>
+                    </div>
+                </div>
+                <div className="bg-white dark:bg-background-dark flex flex-col justify-center items-center p-8">
+                    <Loader2 className="animate-spin h-8 w-8 text-code-blue" />
+                </div>
+            </div>
+        }>
+            <LoginForm />
+        </Suspense>
     );
 }

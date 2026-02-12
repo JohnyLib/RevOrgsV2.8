@@ -1,5 +1,4 @@
 import { type NextRequest, NextResponse } from 'next/server'
-// @ts-ignore
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
 
 export async function GET(request: NextRequest) {
@@ -18,7 +17,7 @@ export async function GET(request: NextRequest) {
                     getAll() {
                         return cookieStore.getAll()
                     },
-                    setAll(cookiesToSet) {
+                    setAll(cookiesToSet: { name: string; value: string; options: CookieOptions }[]) {
                         // This is the tricky part in Next.js Middleware/Route Handlers
                         // We need to return a response with these cookies set.
                     },
@@ -37,8 +36,8 @@ export async function GET(request: NextRequest) {
                     getAll() {
                         return cookieStore.getAll()
                     },
-                    setAll(cookiesToSet) {
-                        cookiesToSet.forEach(({ name, value, options }: { name: string; value: string; options: CookieOptions }) =>
+                    setAll(cookiesToSet: { name: string; value: string; options: CookieOptions }[]) {
+                        cookiesToSet.forEach(({ name, value, options }) =>
                             response.cookies.set(name, value, options)
                         )
                     },
