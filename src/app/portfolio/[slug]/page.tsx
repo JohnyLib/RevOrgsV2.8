@@ -4,6 +4,7 @@ import { Footer } from "@/components/Footer";
 import { getProjectBySlug } from "@/app/actions/projects";
 import { notFound } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 import { ExternalLink, Github, Calendar, Building2 } from "lucide-react";
 import type { Metadata } from "next";
 
@@ -38,6 +39,15 @@ export default async function ProjectDetailPage(props: { params: Promise<{ slug:
                             <span>/</span>
                             <span>{project.slug}</span>
                         </div>
+
+                        <div className="flex flex-wrap gap-2 mb-4">
+                            {project.categories?.map(cat => (
+                                <Link key={cat.id} href={`/portfolio?category=${cat.slug}`} className="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-800 rounded-full text-code-blue hover:bg-code-blue hover:text-white transition-colors">
+                                    {cat.name}
+                                </Link>
+                            ))}
+                        </div>
+
                         <h1 className="text-3xl md:text-5xl font-bold mb-6 text-gray-900 dark:text-white">
                             {project.title}
                         </h1>
@@ -106,6 +116,25 @@ export default async function ProjectDetailPage(props: { params: Promise<{ slug:
                         )}
                     </div>
                 </article>
+
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{
+                        __html: JSON.stringify({
+                            "@context": "https://schema.org",
+                            "@type": "CreativeWork",
+                            headline: project.title,
+                            description: project.short_description || project.title,
+                            image: project.cover_image ? [project.cover_image] : [],
+                            dateCreated: project.created_at,
+                            author: {
+                                "@type": "Organization",
+                                name: project.company_name || "RevOrgs",
+                            },
+                            fileFormat: project.language,
+                        }),
+                    }}
+                />
             </main>
 
             <Footer />

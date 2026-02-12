@@ -1,16 +1,17 @@
 import React from "react";
 import { getBlogPosts, getCategories } from "@/app/actions/blog";
 import { BlogView } from "@/components/BlogView";
+import { Metadata } from "next";
 
-export const metadata = {
-    title: "Blog | Revorgs",
-    description: "Insights on Web Development, SEO, and Technology.",
+export const metadata: Metadata = {
+    title: "Featured Articles | Revorgs Blog",
+    description: "Our best and most popular articles.",
     alternates: {
-        canonical: "/blog",
+        canonical: "/blog/featured",
     },
 };
 
-export default async function BlogPage(props: {
+export default async function BlogFeaturedPage(props: {
     searchParams: Promise<{ page?: string }>;
 }) {
     const searchParams = await props.searchParams;
@@ -18,7 +19,7 @@ export default async function BlogPage(props: {
     const limit = 6;
 
     const [data, categories] = await Promise.all([
-        getBlogPosts(currentPage, limit, {}), // No filters
+        getBlogPosts(currentPage, limit, { isFeatured: true }),
         getCategories()
     ]);
 
@@ -32,6 +33,7 @@ export default async function BlogPage(props: {
             totalCount={totalCount}
             currentPage={currentPage}
             totalPages={totalPages}
+            isFeatured={true}
             basePath="/blog"
         />
     );

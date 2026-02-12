@@ -1,3 +1,9 @@
+export interface Category {
+    id: string;
+    name: string;
+    slug: string;
+}
+
 export interface Project {
     id: string;
     created_at: string;
@@ -28,6 +34,7 @@ export interface Project {
     performance?: number;
     size?: string;
     catCommand?: string;
+    categories?: Category[];
 }
 
 export interface ManifestoItem {

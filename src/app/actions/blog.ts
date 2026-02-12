@@ -15,43 +15,82 @@ export interface BlogPost {
     seo_title: string | null;
     seo_description: string | null;
     seo_keywords: string[] | null;
+    categories?: { id: string; name: string; slug: string }[];
+}
+
+export interface Category {
+    id: string;
+    name: string;
+    slug: string;
+}
+
+export async function getCategories(): Promise<Category[]> {
+    const supabase = await createClient();
+    const { data } = await supabase.from("categories").select("id, name, slug").order("name");
+    return data || [];
 }
 
 export async function getBlogPosts(
     page: number = 1,
-    limit: number = 6
+    limit: number = 6,
+    filters?: {
+        categorySlug?: string;
+        isFeatured?: boolean;
+    }
 ): Promise<{ posts: BlogPost[]; totalCount: number }> {
     try {
         const supabase = await createClient();
         const from = (page - 1) * limit;
         const to = from + limit - 1;
 
-        const { data, error, count } = await supabase
+        let selectStr = "*, post_categories(categories(*))";
+        if (filters?.categorySlug) {
+            selectStr = "*, post_categories!inner(categories!inner(*))";
+        }
+
+        let query = supabase
             .from("posts")
-            .select("*", { count: "exact" })
+            .select(selectStr, { count: "exact" })
             .eq("is_published", true)
             .order("published_at", { ascending: false })
             .range(from, to);
+
+        if (filters?.categorySlug) {
+            query = query.eq("post_categories.categories.slug", filters.categorySlug);
+        }
+
+        if (filters?.isFeatured) {
+            query = query.eq("is_featured", true);
+        }
+
+        const { data, error, count } = await query;
 
         if (error) {
             console.error("Error fetching blog posts:", error);
             return { posts: [], totalCount: 0 };
         }
 
-        const posts: BlogPost[] = (data as any[]).map((p) => ({
-            id: p.id,
-            title: p.title,
-            slug: p.slug,
-            excerpt: p.excerpt,
-            content: p.content,
-            cover_image: p.cover_image,
-            reading_time: p.reading_time,
-            author_name: p.author_name,
-            published_at: p.published_at || p.created_at || new Date().toISOString(),
-            seo_title: p.seo_title,
-            seo_description: p.seo_description,
-            seo_keywords: p.seo_keywords,
-        }));
+        const posts: BlogPost[] = (data as any[]).map((p) => {
+            // Extract categories from the nested structure
+            // Structure is: post_categories: [ { categories: { id, name, slug } } ]
+            const categories = p.post_categories?.map((pc: any) => pc.categories).filter(Boolean) || [];
+
+            return {
+                id: p.id,
+                title: p.title,
+                slug: p.slug,
+                excerpt: p.excerpt,
+                content: p.content,
+                cover_image: p.cover_image,
+                reading_time: p.reading_time,
+                author_name: p.author_name,
+                published_at: p.published_at || p.created_at || new Date().toISOString(),
+                seo_title: p.seo_title,
+                seo_description: p.seo_description,
+                seo_keywords: p.seo_keywords,
+                categories: categories
+            };
+        });
 
         return { posts: posts, totalCount: count || 0 };
     } catch (error) {
@@ -65,7 +104,7 @@ export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> 
         const supabase = await createClient();
         const { data, error } = await supabase
             .from("posts")
-            .select("*")
+            .select("*, post_categories(categories(*))")
             .eq("slug", slug)
             .single();
 
@@ -74,7 +113,9 @@ export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> 
             return null;
         }
 
-        const p = data;
+        const p = data as any;
+        const categories = p.post_categories?.map((pc: any) => pc.categories).filter(Boolean) || [];
+
         return {
             id: p.id,
             title: p.title,
@@ -88,6 +129,7 @@ export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> 
             seo_title: p.seo_title,
             seo_description: p.seo_description,
             seo_keywords: p.seo_keywords,
+            categories: categories
         };
     } catch (error) {
         console.error("Unexpected error:", error);

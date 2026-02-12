@@ -41,6 +41,15 @@ export default async function BlogPostPage(props: { params: Promise<{ slug: stri
                 <article>
                     <header className="mb-8">
                         <div className="flex flex-wrap items-center gap-4 text-xs text-gray-500 mb-6">
+                            {post.categories && post.categories.length > 0 && (
+                                <div className="flex gap-2 mr-2">
+                                    {post.categories.map(cat => (
+                                        <Link key={cat.id} href={`/blog?category=${cat.slug}`} className="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded text-code-blue hover:underline">
+                                            {cat.name}
+                                        </Link>
+                                    ))}
+                                </div>
+                            )}
                             <span className="flex items-center gap-1">
                                 <Calendar size={14} />
                                 {new Date(post.published_at).toLocaleDateString(undefined, {
@@ -95,6 +104,24 @@ export default async function BlogPostPage(props: { params: Promise<{ slug: stri
                         </div>
                     </div>
                 </article>
+
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{
+                        __html: JSON.stringify({
+                            "@context": "https://schema.org",
+                            "@type": "BlogPosting",
+                            headline: post.title,
+                            description: post.seo_description || post.excerpt,
+                            image: post.cover_image ? [post.cover_image] : [],
+                            datePublished: post.published_at,
+                            author: {
+                                "@type": "Person",
+                                name: post.author_name || "RevOrgs Team",
+                            },
+                        }),
+                    }}
+                />
             </main>
 
             <Footer />
