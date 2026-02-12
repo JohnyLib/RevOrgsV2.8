@@ -49,6 +49,9 @@ export async function GET(request: NextRequest) {
 
         if (!error) {
             return response
+        } else {
+            console.error('Auth Exchange Error:', error);
+            return NextResponse.redirect(`${origin}/login?error=${encodeURIComponent(error.message)}`)
         }
     }
 

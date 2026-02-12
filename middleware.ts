@@ -2,6 +2,9 @@ import { type NextRequest } from 'next/server'
 import { updateSession } from '@/lib/middleware-utils'
 
 export async function middleware(request: NextRequest) {
+    // If there's an auth code, we should let the callback route handle it
+    // without potentially stripping cookies or redirecting too early.
+    // However, updateSession is required to refresh the session token.
     return await updateSession(request)
 }
 
