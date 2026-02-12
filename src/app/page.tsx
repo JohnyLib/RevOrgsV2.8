@@ -15,6 +15,18 @@ export default function HomePage() {
   const fullText = "RevOrgs";
 
   useEffect(() => {
+    // Check for auth code in URL (Google OAuth redirect might have landed here)
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const code = params.get('code');
+      if (code) {
+        // Redirect to callback route to complete auth
+        window.location.href = `/auth/callback${window.location.search}`;
+      }
+    }
+  }, []);
+
+  useEffect(() => {
     let index = 0;
     const interval = setInterval(() => {
       setTypingText(fullText.slice(0, index + 1));

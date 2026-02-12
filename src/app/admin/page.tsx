@@ -3,6 +3,8 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { LogOut, LayoutDashboard, MessageSquare, FolderGit2 } from "lucide-react";
 import Image from "next/image";
+import { CreateProjectButton } from "@/components/admin/CreateProjectButton";
+import { ProjectItem } from "@/components/admin/ProjectItem";
 
 export default async function AdminPage() {
     const cookieStore = await cookies();
@@ -178,31 +180,16 @@ export default async function AdminPage() {
 
                 {/* Active Projects */}
                 <section id="projects">
-                    <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
-                        <FolderGit2 size={18} className="text-code-green" />
-                        Projects
-                    </h2>
+                    <div className="flex items-center justify-between mb-6">
+                        <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                            <FolderGit2 size={18} className="text-code-green" />
+                            Projects
+                        </h2>
+                        <CreateProjectButton />
+                    </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {projects?.map((project) => (
-                            <div key={project.id} className="group bg-white dark:bg-terminal-black border border-gray-200 dark:border-gray-800 rounded-sm p-4 hover:border-code-green transition-colors">
-                                <div className="flex items-start justify-between mb-4">
-                                    <div className="font-bold text-gray-900 dark:text-white">{project.name}</div>
-                                    <span className="text-[10px] uppercase tracking-wider text-gray-400 border border-gray-200 dark:border-gray-800 px-2 py-0.5 rounded-sm">
-                                        {project.status}
-                                    </span>
-                                </div>
-                                <p className="text-xs text-gray-500 line-clamp-2 mb-4 h-8">
-                                    {project.description}
-                                </p>
-                                <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100 dark:border-gray-800">
-                                    <div className="text-[10px] text-gray-400 font-mono">
-                                        {project.language}
-                                    </div>
-                                    <button className="text-xs text-code-blue hover:underline">
-                                        Edit
-                                    </button>
-                                </div>
-                            </div>
+                            <ProjectItem key={project.id} project={project as any} />
                         ))}
                     </div>
                 </section>
