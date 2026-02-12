@@ -9,6 +9,38 @@ export interface Project {
     demo_url: string | null;     // Link
     company_name: string | null; // Company Name
     price: string | null;        // Price
-    status?: string; // Optional if not in DB schema yet, but used in form
-    language?: string; // from form state, check if in DB?
+    status?: string;
+    language?: string | null;
+    framework?: string | null;
+
+    // UI/Derived fields (ProjectList)
+    filename?: string;
+    performance?: number;
+    size?: string;
+    catCommand?: string;
+}
+
+export interface ManifestoItem {
+    id: string;
+    commitHash: string;
+    branch: string;
+    date: string;
+    title: string;
+    description: string;
+    tags: string[];
+    color: 'blue' | 'purple' | 'green' | 'orange';
+}
+
+export interface Service {
+    id: string;
+    code: string;
+    title: string;
+    description: string;
+    tags: string[];
+    color: 'blue' | 'purple' | 'green';
+}
+
+export interface ContactFormData {
+    email: string;
+    message: string;
 }

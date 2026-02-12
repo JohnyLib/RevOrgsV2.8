@@ -41,10 +41,10 @@ export function ProjectList({ projects }: { projects: Project[] }) {
                                     <span className="text-gray-500">language:</span>
                                     <span
                                         className={`${project.language === "typescript"
-                                                ? "text-code-blue"
-                                                : project.language === "javascript"
-                                                    ? "text-yellow-400"
-                                                    : "text-code-blue"
+                                            ? "text-code-blue"
+                                            : project.language === "javascript"
+                                                ? "text-yellow-400"
+                                                : "text-code-blue"
                                             }`}
                                     >
                                         {project.language}
@@ -54,8 +54,8 @@ export function ProjectList({ projects }: { projects: Project[] }) {
                                     <span className="text-gray-500">framework:</span>
                                     <span
                                         className={`${project.framework === "vue.js"
-                                                ? "text-code-green"
-                                                : "text-white"
+                                            ? "text-code-green"
+                                            : "text-white"
                                             }`}
                                     >
                                         {project.framework}
@@ -95,7 +95,7 @@ export function ProjectList({ projects }: { projects: Project[] }) {
                                     <div className="w-2 h-2 rounded-full bg-yellow-400"></div>
                                     <div className="w-2 h-2 rounded-full bg-green-400"></div>
                                     <div className="ml-4 text-[10px] text-gray-400 font-mono flex items-center gap-2">
-                                        <span>{project.url}</span>
+                                        <span>{project.demo_url}</span>
                                         <span className="hidden group-hover:inline-block text-gray-500">
                                             - loading...
                                         </span>
@@ -103,7 +103,7 @@ export function ProjectList({ projects }: { projects: Project[] }) {
                                 </div>
                                 <div className="flex-grow overflow-hidden relative bg-gray-50 dark:bg-gray-950">
                                     <Image
-                                        src={project.imageUrl}
+                                        src={project.image_url || "/placeholder.png"}
                                         alt={project.name}
                                         fill
                                         className="object-cover transition-transform duration-700 group-hover:scale-105"

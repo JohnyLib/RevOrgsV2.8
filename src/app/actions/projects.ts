@@ -43,18 +43,26 @@ export async function getProjects(): Promise<Project[]> {
         }
 
         // Transform database shape to UI shape
+        // Transform database shape to UI shape
         return (data as any[]).map((p) => ({
             id: p.id,
-            filename: p.name.toLowerCase().replace(/\s+/g, "-") + ".tsx", // default to tsx
+            created_at: p.created_at,
             name: p.name,
             description: p.description || "No description provided.",
-            language: p.tech_stack?.[0] || "typescript",
-            framework: p.tech_stack?.[1] || "react",
+            image_url: p.image_url || "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=2070&auto=format&fit=crop",
+            tech_stack: p.tech_stack || [],
+            repo_url: p.repo_url,
+            demo_url: p.demo_url,
+            company_name: p.company_name,
+            price: p.price,
             status: "deployed",
-            performance: 98, // Mock performance metric
-            size: "2.5MB",  // Mock size
-            url: p.demo_url || "#",
-            imageUrl: p.image_url || "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=2070&auto=format&fit=crop",
+
+            // Derived/Legacy fields for ProjectList
+            filename: p.name.toLowerCase().replace(/\s+/g, "-") + ".tsx",
+            language: p.language || p.tech_stack?.[0] || "typescript",
+            framework: p.framework || p.tech_stack?.[1] || "react",
+            performance: 98, // Mock
+            size: "2.5MB",   // Mock
             catCommand: `cat ${p.name.toLowerCase().replace(/\s+/g, "_")}.md`,
         }));
     } catch (error) {
