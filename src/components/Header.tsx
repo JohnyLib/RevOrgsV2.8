@@ -13,6 +13,7 @@ export const Header: React.FC = () => {
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
+        // eslint-disable-next-line 
         setMounted(true);
     }, []);
 
@@ -60,8 +61,8 @@ export const Header: React.FC = () => {
                             <Link
                                 href="/projects"
                                 className={`hover:text-code-purple transition-colors ${pathname === "/projects"
-                                        ? "text-code-purple"
-                                        : "text-gray-500"
+                                    ? "text-code-purple"
+                                    : "text-gray-500"
                                     }`}
                             >
                                 ./projects

@@ -18,6 +18,7 @@ function LoginForm() {
     useEffect(() => {
         // If middleware redirects here, it might add an error query param
         const err = searchParams.get("error");
+        // eslint-disable-next-line
         if (err) setError(decodeURIComponent(err));
     }, [searchParams]);
 

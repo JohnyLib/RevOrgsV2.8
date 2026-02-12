@@ -181,7 +181,7 @@ export default function HomePage() {
               whileHover={{ y: -5 }}
               className="group p-6 border border-gray-200 dark:border-gray-800 rounded hover:border-gray-400 dark:hover:border-gray-600 transition-all bg-white dark:bg-terminal-black hover:shadow-lg dark:hover:shadow-neon-blue"
             >
-              <div className="text-code-purple mb-4 text-sm">// 01</div>
+              <div className="text-code-purple mb-4 text-sm">{"// 01"}</div>
               <h3 className="text-xl font-bold mb-3">
                 {"<WebDevelopment />"}
               </h3>
@@ -205,7 +205,7 @@ export default function HomePage() {
               whileHover={{ y: -5 }}
               className="group p-6 border border-gray-200 dark:border-gray-800 rounded hover:border-gray-400 dark:hover:border-gray-600 transition-all bg-white dark:bg-terminal-black hover:shadow-lg dark:hover:shadow-neon-blue"
             >
-              <div className="text-code-blue mb-4 text-sm">// 02</div>
+              <div className="text-code-blue mb-4 text-sm">{"// 02"}</div>
               <h3 className="text-xl font-bold mb-3">
                 {"<UI_UX_Design />"}
               </h3>
@@ -226,7 +226,7 @@ export default function HomePage() {
               whileHover={{ y: -5 }}
               className="group p-6 border border-gray-200 dark:border-gray-800 rounded hover:border-gray-400 dark:hover:border-gray-600 transition-all bg-white dark:bg-terminal-black hover:shadow-lg dark:hover:shadow-neon-blue"
             >
-              <div className="text-code-green mb-4 text-sm">// 03</div>
+              <div className="text-code-green mb-4 text-sm">{"// 03"}</div>
               <h3 className="text-xl font-bold mb-3">
                 {"<Consulting />"}
               </h3>
@@ -262,14 +262,14 @@ export default function HomePage() {
             <div className="bg-gray-50 dark:bg-gray-900/50 p-6 rounded border-l-4 border-code-blue font-mono text-sm">
               <div className="text-gray-900 dark:text-white mt-2 font-bold">
                 {"const client = \"Alexei V.\"; "}
-                <span className="text-gray-500">// CEO, TechMoldova</span>
+                <span className="text-gray-500">{"// CEO, TechMoldova"}</span>
               </div>
             </div>
             <div className="bg-gray-50 dark:bg-gray-900/50 p-6 rounded border-l-4 border-code-green font-mono text-sm">
               <div className="text-gray-900 dark:text-white mt-2 font-bold">
                 {"const client = \"Maria D.\"; "}
                 <span className="text-gray-500">
-                  // Marketing Lead, ShopSmart
+                  {"// Marketing Lead, ShopSmart"}
                 </span>
               </div>
             </div>

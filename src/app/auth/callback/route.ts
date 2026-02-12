@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
                     getAll() {
                         return cookieStore.getAll()
                     },
-                    setAll(cookiesToSet: { name: string; value: string; options: CookieOptions }[]) {
+                    setAll(_cookiesToSet: { name: string; value: string; options: CookieOptions }[]) {
                         // This is the tricky part in Next.js Middleware/Route Handlers
                         // We need to return a response with these cookies set.
                     },

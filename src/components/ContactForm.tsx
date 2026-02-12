@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useActionState, useState } from "react";
+import React, { useActionState } from "react";
 import { sendContactMessage, ContactState } from "@/app/actions/contact";
 import { Loader2 } from "lucide-react";
 

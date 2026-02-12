@@ -207,7 +207,7 @@ export default function ManifestoPage() {
                                         <br />
                                         <br />
                                         <span className="text-gray-400 italic">
-                      // Your success is our merge request acceptance criteria.
+                                            {"// Your success is our merge request acceptance criteria."}
                                         </span>
                                     </p>
                                 </div>
