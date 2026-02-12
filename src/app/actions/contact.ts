@@ -1,11 +1,7 @@
 "use server";
 
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from "@/lib/supabase/server";
 import { z } from "zod";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-const supabase = createClient(supabaseUrl, supabaseKey);
 
 const contactSchema = z.object({
     email: z.string().email({ message: "Invalid email address" }),
@@ -42,11 +38,15 @@ export async function sendContactMessage(prevState: ContactState, formData: Form
     const { email, message } = validatedFields.data;
 
     try {
-        // 1. Save to Supabase
-        const { error: dbError } = await supabase.from("contacts").insert({
+        const supabase = await createClient();
+
+        // 1. Save to Supabase 'leads' table
+        const { error: dbError } = await supabase.from("leads").insert({
             email,
             message,
-            name: "Anonymous", // Optional: Add name field to form if needed
+            name: email.split("@")[0], // Default name from email
+            source: "contact_form",
+            status: "new",
         });
 
         if (dbError) {
@@ -57,8 +57,42 @@ export async function sendContactMessage(prevState: ContactState, formData: Form
             };
         }
 
-        // 2. TODO: Send Email Notification (Resend/NodeMailer)
-        // await sendEmail({ to: "admin@revorgs.com", subject: "New Contact", html: `<p>${message}</p>` });
+        // 2. Send Email Notification (Resend)
+        const resendApiKey = process.env.RESEND_API_KEY;
+        const adminEmail = process.env.ADMIN_EMAIL || "admin@revorgs.com";
+
+        if (resendApiKey) {
+            try {
+                const res = await fetch("https://api.resend.com/emails", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${resendApiKey}`,
+                    },
+                    body: JSON.stringify({
+                        from: "RevOrgs Contact <onboarding@resend.dev>", // Or verified domain
+                        to: [adminEmail],
+                        subject: `New Lead: ${email}`,
+                        html: `
+                            <p><strong>New Contact Form Submission</strong></p>
+                            <p><strong>Email:</strong> ${email}</p>
+                            <p><strong>Message:</strong></p>
+                            <p>${message}</p>
+                        `,
+                    }),
+                });
+
+                if (!res.ok) {
+                    const errorData = await res.json();
+                    console.error("Resend API Error:", errorData);
+                }
+            } catch (emailError) {
+                console.error("Email sending failed:", emailError);
+                // Don't fail the request if email fails, db save succeeded
+            }
+        } else {
+            console.warn("RESEND_API_KEY not set. Skipping email notification.");
+        }
 
         return {
             success: true,

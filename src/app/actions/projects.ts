@@ -1,72 +1,119 @@
 "use server";
 
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from "@/lib/supabase/server";
 import { Project } from "@/types";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-const supabase = createClient(supabaseUrl, supabaseKey);
-
-// TODO: Replace with Supabase fetch — `supabase.from('projects').select('*')`
-/*
-const projects: Project[] = [
-    {
-        id: "1",
-        filename: "./e-commerce-spa.tsx",
-        name: "LuxeMarket_v2",
-        description:
-            "A high-performance headless e-commerce platform built for a luxury fashion retailer. Features real-time inventory and AI-driven recommendations.",
-        language: "typescript",
-        framework: "next.js",
-        status: "deployed",
-        performance: 99,
-        size: "2.4MB",
-        url: "https://luxemarket.app",
-        imageUrl:
-            "https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=2070&auto=format&fit=crop",
-        catCommand: "cat content.md",
-    },
-    // ...
-];
-*/
-
-export async function getProjects(): Promise<Project[]> {
+export async function getProjects(
+    page: number = 1,
+    limit: number = 6
+): Promise<{ projects: Project[]; totalCount: number }> {
     try {
-        const { data, error } = await supabase
+        const supabase = await createClient();
+        const from = (page - 1) * limit;
+        const to = from + limit - 1;
+
+        const { data, error, count } = await supabase
             .from("projects")
-            .select("*")
-            .order("created_at", { ascending: false });
+            .select("*", { count: "exact" })
+            .eq("is_published", true)
+            .order("created_at", { ascending: false })
+            .range(from, to);
 
         if (error) {
             console.error("Error fetching projects:", error);
-            return [];
+            return { projects: [], totalCount: 0 };
         }
 
-        // Transform database shape to UI shape
-        // Transform database shape to UI shape
-        return (data as any[]).map((p) => ({
+        const projectList: Project[] = (data as any[]).map((p) => ({
             id: p.id,
-            created_at: p.created_at,
-            name: p.name,
-            description: p.description || "No description provided.",
-            image_url: p.image_url || "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=2070&auto=format&fit=crop",
-            tech_stack: p.tech_stack || [],
-            repo_url: p.repo_url,
-            demo_url: p.demo_url,
-            company_name: p.company_name,
-            price: p.price,
-            status: "deployed",
+            created_at: p.created_at || new Date().toISOString(),
+            title: p.title,
+            slug: p.slug,
+            short_description: p.short_description,
+            full_description: p.full_description,
+            cover_image: p.cover_image,
 
-            // Derived/Legacy fields for ProjectList
-            filename: p.name.toLowerCase().replace(/\s+/g, "-") + ".tsx",
-            language: p.language || p.tech_stack?.[0] || "typescript",
-            framework: p.framework || p.tech_stack?.[1] || "react",
-            performance: 98, // Mock
-            size: "2.5MB",   // Mock
-            catCommand: `cat ${p.name.toLowerCase().replace(/\s+/g, "_")}.md`,
+            // Mappings for UI compatibility
+            name: p.title,
+            description: p.short_description || "No description provided.",
+            image_url: p.cover_image || "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=2070&auto=format&fit=crop",
+            tech_stack: [], // Need to fetch relations if needed, or use a view. For now empty array.
+            repo_url: p.project_url,
+            demo_url: p.project_url,
+            company_name: p.client_name,
+            price: p.metrics?.price || null, // Assuming price stored in metrics for now or just null
+
+            // UI Defaults
+            // UI Defaults
+            status: "deployed",
+            filename: (p.slug || "") + ".tsx",
+            language: "typescript",
+            framework: "next.js",
+            performance: 100,
+            size: "0KB",
+            catCommand: `cat ${p.slug}.md`,
         }));
+
+        return { projects: projectList, totalCount: count || 0 };
     } catch (error) {
         console.error("Unexpected error:", error);
-        return [];
+        return { projects: [], totalCount: 0 };
     }
+}
+
+export async function getProjectBySlug(slug: string): Promise<Project | null> {
+    try {
+        const supabase = await createClient();
+        const { data, error } = await supabase
+            .from("projects")
+            .select("*")
+            .eq("slug", slug)
+            .single();
+
+        if (error) {
+            console.error("Error fetching project by slug:", error);
+            return null;
+        }
+
+        const p = data;
+        return {
+            id: p.id,
+            created_at: p.created_at || new Date().toISOString(),
+            title: p.title,
+            slug: p.slug,
+            short_description: p.short_description,
+            full_description: p.full_description,
+            cover_image: p.cover_image,
+
+            // Legacy/UI mappings
+            name: p.title,
+            description: p.short_description || "No description provided.",
+            image_url: p.cover_image || "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=2070&auto=format&fit=crop",
+            tech_stack: [],
+            repo_url: p.project_url,
+            demo_url: p.project_url,
+            company_name: p.client_name,
+            price: (p.metrics as any)?.price || null,
+
+            status: "deployed",
+            filename: (p.slug || "") + ".tsx",
+            language: "typescript",
+            framework: "next.js",
+            performance: 100,
+            size: "0KB",
+            catCommand: `cat ${p.slug}.md`,
+        };
+    } catch (error) {
+        console.error("Unexpected error:", error);
+        return null;
+    }
+}
+
+export async function getAllProjectSlugs(): Promise<{ slug: string; updated_at: string }[]> {
+    const supabase = await createClient();
+    const { data } = await supabase.from("projects").select("slug, created_at").eq("is_published", true);
+    return (data || []).map((p) => ({
+        slug: p.slug,
+        updated_at: p.created_at || new Date().toISOString(),
+    }));
 }

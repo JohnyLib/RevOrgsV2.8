@@ -59,13 +59,29 @@ export const Header: React.FC = () => {
                                 ~/home
                             </Link>
                             <Link
-                                href="/projects"
-                                className={`hover:text-code-purple transition-colors ${pathname === "/projects"
+                                href="/portfolio"
+                                className={`hover:text-code-purple transition-colors ${pathname === "/portfolio"
                                     ? "text-code-purple"
                                     : "text-gray-500"
                                     }`}
                             >
-                                ./projects
+                                ./portfolio
+                            </Link>
+                            <Link
+                                href="/services"
+                                className={`hover:text-code-blue transition-colors ${pathname === "/services"
+                                    ? "text-code-blue"
+                                    : "text-gray-500"
+                                    }`}
+                            >
+                                ./services
+                            </Link>
+                            <Link
+                                href="/blog"
+                                className={`hover:text-code-yellow transition-colors ${pathname === "/blog" ? "text-yellow-500" : "text-gray-500"
+                                    }`}
+                            >
+                                ./blog
                             </Link>
                             <Link
                                 href="/manifesto"
@@ -74,12 +90,6 @@ export const Header: React.FC = () => {
                             >
                                 ./manifesto
                             </Link>
-                            <button
-                                onClick={() => handleScroll("services")}
-                                className="hover:text-gray-900 dark:hover:text-white text-gray-500 transition-colors"
-                            >
-                                ./services
-                            </button>
                             <button
                                 onClick={() => handleScroll("contact")}
                                 className="px-4 py-2 border border-gray-900 dark:border-white rounded hover:bg-gray-900 hover:text-white dark:hover:bg-white dark:hover:text-black transition-all"
@@ -130,12 +140,28 @@ export const Header: React.FC = () => {
                             ~/home
                         </Link>
                         <Link
-                            href="/projects"
+                            href="/portfolio"
                             onClick={() => setMobileOpen(false)}
-                            className={`block py-2 ${pathname === "/projects" ? "text-code-purple" : "text-gray-500"
+                            className={`block py-2 ${pathname === "/portfolio" ? "text-code-purple" : "text-gray-500"
                                 }`}
                         >
-                            ./projects
+                            ./portfolio
+                        </Link>
+                        <Link
+                            href="/services"
+                            onClick={() => setMobileOpen(false)}
+                            className={`block py-2 ${pathname === "/services" ? "text-code-blue" : "text-gray-500"
+                                }`}
+                        >
+                            ./services
+                        </Link>
+                        <Link
+                            href="/blog"
+                            onClick={() => setMobileOpen(false)}
+                            className={`block py-2 ${pathname === "/blog" ? "text-yellow-500" : "text-gray-500"
+                                }`}
+                        >
+                            ./blog
                         </Link>
                         <Link
                             href="/manifesto"
@@ -145,12 +171,6 @@ export const Header: React.FC = () => {
                         >
                             ./manifesto
                         </Link>
-                        <button
-                            onClick={() => handleScroll("services")}
-                            className="block py-2 text-gray-500 hover:text-white transition-colors"
-                        >
-                            ./services
-                        </button>
                         <button
                             onClick={() => handleScroll("contact")}
                             className="block w-full text-left py-2 px-4 border border-gray-900 dark:border-white rounded hover:bg-gray-900 hover:text-white dark:hover:bg-white dark:hover:text-black transition-all"

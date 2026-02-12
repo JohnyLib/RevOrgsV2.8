@@ -5,7 +5,7 @@ import { ProjectList } from "@/components/ProjectList";
 import { getProjects } from "@/app/actions/projects";
 import { Pagination } from "@/components/Pagination";
 
-export default async function ProjectsPage(props: {
+export default async function PortfolioPage(props: {
     searchParams: Promise<{ page?: string }>;
 }) {
     const searchParams = await props.searchParams;
@@ -21,13 +21,12 @@ export default async function ProjectsPage(props: {
             <main className="flex-grow pt-24 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
                 <header className="mb-12 border-b border-gray-200 dark:border-gray-800 pb-8">
                     <h1 className="text-3xl md:text-4xl font-bold mb-4 flex items-center gap-3">
-                        <span className="text-4xl text-code-blue">📂</span>
-                        Directory Listing
+                        <span className="text-4xl text-code-blue">💼</span>
+                        Portfolio
                     </h1>
                     <p className="text-gray-500 dark:text-gray-400 max-w-2xl text-sm leading-relaxed">
-                        Index of /projects/ <br />
-                        Displaying {projects.length} items from database. All projects are
-                        deployed and monitored.
+                        Selected Works & Case Studies. <br />
+                        Displaying {projects.length} items.
                     </p>
                 </header>
 
@@ -36,7 +35,7 @@ export default async function ProjectsPage(props: {
                 <div className="mt-16 border-t border-gray-200 dark:border-gray-800 pt-8 flex justify-between items-center text-sm">
                     <div className="text-gray-500">
                         Showing {(currentPage - 1) * limit + 1}-
-                        {Math.min(currentPage * limit, totalCount)} of {totalCount} files
+                        {Math.min(currentPage * limit, totalCount)} of {totalCount} projects
                     </div>
                     <Pagination totalPages={totalPages} currentPage={currentPage} />
                 </div>

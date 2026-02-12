@@ -17,7 +17,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://rev-orgs-v2-8.vercel.app"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://www.revorgs.xyz"),
   title: {
     default: "RevOrgs — Premium Web Development in Moldova",
     template: "%s | RevOrgs",
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     title: "RevOrgs — Premium Web Development in Moldova",
     description:
       "Crafting digital experiences with precision. Top-tier web agency in Republic of Moldova.",
-    url: "https://rev-orgs-v2-8.vercel.app",
+    url: process.env.NEXT_PUBLIC_SITE_URL || "https://www.revorgs.xyz",
     siteName: "RevOrgs",
     images: [
       {
@@ -77,7 +77,7 @@ export default function RootLayout({
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
     "name": "RevOrgs",
-    "url": "https://rev-orgs-v2-8.vercel.app",
+    "url": process.env.NEXT_PUBLIC_SITE_URL || "https://www.revorgs.xyz",
     "areaServed": {
       "@type": "Country",
       "name": "Republic of Moldova"

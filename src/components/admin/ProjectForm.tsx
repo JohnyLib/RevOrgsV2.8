@@ -1,25 +1,30 @@
 "use client";
 
 import { useState } from "react";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/client";
 import { Loader2, X, Save } from "lucide-react";
 
 
 
 // Define interface locally or import if shared
+// Define interface matching Supabase table row + extra form fields
+// Define interface matching Supabase table row + extra form fields
 interface ProjectData {
     id?: string;
-    name: string;
-    description: string | null;
-    status: string;
-    language: string | null;
-    framework: string | null;
-    tech_stack: string | string[] | null; // Accept array from DB, but state will be string
-    repo_url: string | null;
-    demo_url: string | null;
-    image_url: string | null;
-    company_name: string | null;
-    price: string | null;
+    title: string;
+    slug?: string;
+    short_description: string | null;
+    is_published: boolean;
+    cover_image: string | null;
+    client_name: string | null;
+    project_url: string | null;
+    // Virtual fields for metrics
+    price: string;
+    repo_url: string;
+    tech_stack: string;
+    framework: string;
+    language: string;
+    metrics?: any;
 }
 
 interface ProjectFormProps {
@@ -31,43 +36,52 @@ interface ProjectFormProps {
 export function ProjectForm({ onClose, onSuccess, initialData }: ProjectFormProps) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const supabase = createClient();
 
     // Helper to format initial tech_stack
-    const formatTechStack = (stack: string | string[] | null | undefined): string => {
+    const formatTechStack = (stack: any): string => {
         if (!stack) return "";
         if (Array.isArray(stack)) return stack.join(", ");
-        return stack;
+        return String(stack);
     };
 
+    const initialMetrics = initialData?.metrics || {};
+
     const [formData, setFormData] = useState<{
-        name: string;
-        description: string;
-        status: string;
-        language: string;
-        framework: string;
-        tech_stack: string;
-        repo_url: string;
-        demo_url: string;
-        image_url: string;
-        company_name: string;
+        title: string;
+        short_description: string;
+        is_published: boolean;
+        client_name: string;
+        cover_image: string;
+        project_url: string;
+        // Virtual
         price: string;
+        repo_url: string;
+        tech_stack: string;
+        framework: string;
+        language: string;
     }>({
-        name: initialData?.name || "",
-        description: initialData?.description || "",
-        status: initialData?.status || "active",
-        language: initialData?.language || "",
-        framework: initialData?.framework || "",
-        tech_stack: formatTechStack(initialData?.tech_stack),
-        repo_url: initialData?.repo_url || "",
-        demo_url: initialData?.demo_url || "",
-        image_url: initialData?.image_url || "",
-        company_name: initialData?.company_name || "",
-        price: initialData?.price || "",
+        title: initialData?.title || "",
+        short_description: initialData?.short_description || "",
+        is_published: initialData?.is_published ?? true,
+        client_name: initialData?.client_name || "",
+        cover_image: initialData?.cover_image || "",
+        project_url: initialData?.project_url || "",
+
+        // Metrics
+        price: initialMetrics.price || "",
+        repo_url: initialMetrics.repo_url || "",
+        tech_stack: formatTechStack(initialMetrics.tech_stack),
+        framework: initialMetrics.framework || "",
+        language: initialMetrics.language || "",
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
+        const { name, value, type } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value
+        }));
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -76,19 +90,25 @@ export function ProjectForm({ onClose, onSuccess, initialData }: ProjectFormProp
         setError(null);
 
         try {
+            // Prepare metrics
+            const metrics = {
+                price: formData.price,
+                repo_url: formData.repo_url,
+                tech_stack: formData.tech_stack.split(",").map(s => s.trim()).filter(Boolean),
+                framework: formData.framework,
+                language: formData.language,
+            };
+
             // Prepare data for DB
             const dbData = {
-                name: formData.name,
-                description: formData.description || null,
-                status: formData.status,
-                language: formData.language || null,
-                framework: formData.framework || null,
-                tech_stack: formData.tech_stack.split(",").map(s => s.trim()).filter(Boolean),
-                repo_url: formData.repo_url || null,
-                demo_url: formData.demo_url || null,
-                image_url: formData.image_url || null,
-                company_name: formData.company_name || null,
-                price: formData.price || null,
+                title: formData.title,
+                slug: formData.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '') || 'project-' + Date.now(),
+                short_description: formData.short_description || null,
+                is_published: formData.is_published,
+                client_name: formData.client_name || null,
+                cover_image: formData.cover_image || null,
+                project_url: formData.project_url || null,
+                metrics: metrics
             };
 
             if (initialData?.id) {
@@ -142,8 +162,8 @@ export function ProjectForm({ onClose, onSuccess, initialData }: ProjectFormProp
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Company Name</label>
                             <input
                                 type="text"
-                                name="company_name"
-                                value={formData.company_name}
+                                name="client_name"
+                                value={formData.client_name}
                                 onChange={handleChange}
                                 className="w-full rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-code-blue"
                                 placeholder="e.g. TechCorp Ltd."
@@ -155,9 +175,9 @@ export function ProjectForm({ onClose, onSuccess, initialData }: ProjectFormProp
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Project Name</label>
                             <input
                                 type="text"
-                                name="name"
+                                name="title"
                                 required
-                                value={formData.name}
+                                value={formData.title}
                                 onChange={handleChange}
                                 className="w-full rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-code-blue"
                                 placeholder="e.g. E-Commerce Platform"
@@ -168,9 +188,9 @@ export function ProjectForm({ onClose, onSuccess, initialData }: ProjectFormProp
                         <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Description</label>
                             <textarea
-                                name="description"
+                                name="short_description"
                                 rows={3}
-                                value={formData.description}
+                                value={formData.short_description}
                                 onChange={handleChange}
                                 className="w-full rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-code-blue"
                                 placeholder="Brief project description..."
@@ -183,8 +203,8 @@ export function ProjectForm({ onClose, onSuccess, initialData }: ProjectFormProp
                                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Live Link</label>
                                 <input
                                     type="text"
-                                    name="demo_url"
-                                    value={formData.demo_url}
+                                    name="project_url"
+                                    value={formData.project_url}
                                     onChange={handleChange}
                                     className="w-full rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-code-blue"
                                     placeholder="https://..."
@@ -209,8 +229,8 @@ export function ProjectForm({ onClose, onSuccess, initialData }: ProjectFormProp
                                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Photo URL</label>
                                 <input
                                     type="text"
-                                    name="image_url"
-                                    value={formData.image_url}
+                                    name="cover_image"
+                                    value={formData.cover_image}
                                     onChange={handleChange}
                                     className="w-full rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-code-blue"
                                     placeholder="https://..."
@@ -244,17 +264,15 @@ export function ProjectForm({ onClose, onSuccess, initialData }: ProjectFormProp
 
                         {/* Status Selection */}
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Status</label>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Published</label>
                             <select
-                                name="status"
-                                value={formData.status}
-                                onChange={handleChange}
+                                name="is_published"
+                                value={String(formData.is_published)}
+                                onChange={(e) => setFormData(prev => ({ ...prev, is_published: e.target.value === 'true' }))}
                                 className="w-full rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-code-blue"
                             >
-                                <option value="active">Active</option>
-                                <option value="completed">Completed</option>
-                                <option value="archived">Archived</option>
-                                <option value="planning">Planning</option>
+                                <option value="true">Published</option>
+                                <option value="false">Draft</option>
                             </select>
                         </div>
                     </div>
