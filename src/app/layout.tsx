@@ -17,52 +17,29 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://www.revorgs.xyz"),
-  title: {
-    default: "RevOrgs — Premium Web Development in Moldova",
-    template: "%s | RevOrgs",
-  },
-  description:
-    "RevOrgs is a web development agency in Chisinau, Moldova. We specialize in Next.js, React, and creating high-performance Single Page Applications (SPAs) for businesses.",
-  keywords: [
-    "Web Development Moldova",
-    "IT Company Chisinau",
-    "React Agency Moldova",
-    "Next.js Developers",
-    "Site Creation MD",
-    "Web Design Moldova",
-    "Software Development Chisinau",
-    "RevOrgs",
-  ],
+  metadataBase: new URL("https://revorgs.xyz"),
+  title: "RevOrgs - Freelance Web Developers",
+  description: "Construim site-uri care generează clienți și automatizăm procesele pentru a-ți crește afacerea.",
   openGraph: {
-    title: "RevOrgs — Premium Web Development in Moldova",
-    description:
-      "Crafting digital experiences with precision. Top-tier web agency in Republic of Moldova.",
-    url: process.env.NEXT_PUBLIC_SITE_URL || "https://www.revorgs.xyz",
+    title: "RevOrgs - Freelance Web Developers",
+    description: "Construim site-uri care generează clienți și automatizăm procesele pentru a-ți crește afacerea.",
+    url: "https://revorgs.xyz",
     siteName: "RevOrgs",
     images: [
       {
-        url: "/api/og",
+        url: "https://revorgs.xyz/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "RevOrgs Web Agency",
       },
     ],
-    locale: "en_US",
+    locale: "ro_RO",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "RevOrgs — Web Agency Moldova",
-    description: "Premium web development services in Chisinau, Moldova.",
-    images: ["/api/og"],
-  },
-  alternates: {
-    canonical: "/",
-  },
-  robots: {
-    index: true,
-    follow: true,
+    title: "RevOrgs - Freelance Web Developers",
+    description: "Site-uri rapide și automatizare pentru business-ul tău.",
+    images: ["https://revorgs.xyz/og-image.jpg"],
   },
 };
 
