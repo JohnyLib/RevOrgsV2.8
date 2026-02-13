@@ -1,8 +1,12 @@
 import React from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { Github, Twitter, Linkedin } from "lucide-react";
+import { useTranslations } from 'next-intl';
 
 export const Footer: React.FC = () => {
+    const t = useTranslations('Footer');
+    const tNav = useTranslations('Navigation');
+
     return (
         <footer className="bg-gray-100 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 transition-colors duration-300">
             <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
@@ -12,21 +16,20 @@ export const Footer: React.FC = () => {
                             {"<RevOrgs />"}
                         </span>
                         <p className="mt-4 text-xs text-gray-500">
-                            Moldova-based web development agency specializing in modern SPAs
-                            and digital transformation.
+                            {t('description')}
                         </p>
                     </div>
                     <div>
                         <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">
-                            Sitemap
+                            {t('sitemap')}
                         </h3>
                         <ul className="space-y-3 text-sm">
                             <li>
                                 <Link
-                                    href="/#services"
+                                    href="/services"
                                     className="text-gray-500 hover:text-code-blue transition-colors"
                                 >
-                                    Services
+                                    {tNav('services')}
                                 </Link>
                             </li>
                             <li>
@@ -34,15 +37,15 @@ export const Footer: React.FC = () => {
                                     href="/manifesto"
                                     className="text-gray-500 hover:text-code-green transition-colors"
                                 >
-                                    About Us
+                                    {tNav('manifesto')}
                                 </Link>
                             </li>
                             <li>
                                 <Link
-                                    href="/projects"
+                                    href="/portfolio"
                                     className="text-gray-500 hover:text-code-purple transition-colors"
                                 >
-                                    Projects
+                                    {tNav('portfolio')}
                                 </Link>
                             </li>
                             <li>
@@ -50,14 +53,14 @@ export const Footer: React.FC = () => {
                                     href="/#contact"
                                     className="text-gray-500 hover:text-white transition-colors"
                                 >
-                                    Contact
+                                    {tNav('contact')}
                                 </Link>
                             </li>
                         </ul>
                     </div>
                     <div>
                         <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">
-                            Stack
+                            {t('stack')}
                         </h3>
                         <ul className="space-y-3 text-sm">
                             <li>
@@ -76,7 +79,7 @@ export const Footer: React.FC = () => {
                     </div>
                     <div>
                         <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">
-                            Social
+                            {t('social')}
                         </h3>
                         <ul className="space-y-3 text-sm">
                             <li>
@@ -110,10 +113,10 @@ export const Footer: React.FC = () => {
                     <p className="text-center text-xs text-gray-400 font-mono mb-4 md:mb-0">
                         <span className="text-code-green">root</span>@
                         <span className="text-code-blue">RevOrgs</span>:~/
-                        <span className="text-gray-500"><span suppressHydrationWarning>{new Date().getFullYear()}</span>_All_Rights_Reserved</span>
+                        <span className="text-gray-500"><span suppressHydrationWarning>{new Date().getFullYear()}</span>_{t('rights').replace(/ /g, '_')}</span>
                     </p>
                     <div className="text-center text-xs text-gray-500">
-                        158 Madison Ave, New York, NY 10016 | Designed in Moldova
+                        158 Madison Ave, New York, NY 10016 | {t('designedIn')}
                     </div>
                 </div>
             </div>

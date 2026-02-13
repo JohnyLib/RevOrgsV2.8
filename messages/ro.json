@@ -1,0 +1,87 @@
+{
+    "Navigation": {
+        "home": "Acasă",
+        "services": "Servicii",
+        "portfolio": "Portofoliu",
+        "blog": "Blog",
+        "manifesto": "Manifest",
+        "contact": "Contact"
+    },
+    "Hero": {
+        "title": "Dezvoltare web premium",
+        "subtitle": "Transformăm ideile tale în realitate digitală."
+    },
+    "Common": {
+        "getStarted": "Începe acum",
+        "learnMore": "Află mai multe"
+    },
+    "Footer": {
+        "sitemap": "Harta site-ului",
+        "stack": "Tehnologii",
+        "social": "Social",
+        "legal": "Legal",
+        "privacy": "Politica de confidențialitate",
+        "terms": "Termeni și condiții",
+        "cookies": "Politica de cookie-uri",
+        "description": "Construim viitorul digital al Moldovei, pixel cu pixel. Specializați în aplicații web performante și transformare digitală.",
+        "designedIn": "Proiectat în Moldova",
+        "rights": "Toate drepturile rezervate"
+    },
+    "Portfolio": {
+        "categories": "Categorii",
+        "technologies": "Tehnologii",
+        "all": "Toate",
+        "any": "Oricare",
+        "title": "Portofoliu",
+        "meta": {
+            "title": "Portofoliu | RevOrgs",
+            "description": "Explorează proiectele noastre recente."
+        }
+    },
+    "Services": {
+        "title": "Serviciile Noastre",
+        "subtitle": "Soluții digitale complete adaptate pentru creștere. De la concept la implementare, gestionăm întregul ciclu de viață.",
+        "startingAt": "De la",
+        "viewDetails": "Vezi detalii",
+        "notFound": "Nu au fost găsite servicii"
+    },
+    "Manifesto": {
+        "title": "Despre_RevOrgs",
+        "description": "O privire în istoria, valorile și cultura noastră inginerească.",
+        "history": "Istoric",
+        "principles": "Principii_Debază.md",
+        "globalReach": "Acoperire_Globală.svg",
+        "commits": {
+            "expansion": {
+                "title": "Expansiune Globală",
+                "desc": "Parteneriate stabilite în SUA și Europa de Vest."
+            },
+            "migration": {
+                "title": "Migrare Next.js",
+                "desc": "Focus complet pe Next.js și React Server Components."
+            },
+            "founded": {
+                "title": "Fondarea Agenției",
+                "desc": "RevOrgs a fost inițiată în Chișinău, Moldova."
+            }
+        },
+        "principlesItems": {
+            "philosophy": {
+                "title": "Filozofie",
+                "desc": "Credem că simplitatea este suprema rafinament."
+            },
+            "excellence": {
+                "title": "Excelență Inginerească",
+                "desc": "Aplicăm pipeline-uri CI/CD stricte și 100% acoperire teste."
+            },
+            "client": {
+                "title": "Centrare pe Client",
+                "desc": "Clienții noștri sunt parteneri în repozitoriul nostru."
+            }
+        }
+    },
+    "Metadata": {
+        "title": "RevOrgs - Agenție de Dezvoltare Web din Moldova",
+        "description": "Agenție premium de dezvoltare web în Chișinău. Specializați în aplicații React, Next.js și transformare digitală."
+    }
+}

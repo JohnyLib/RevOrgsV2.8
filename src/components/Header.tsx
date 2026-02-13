@@ -1,13 +1,16 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { Link, usePathname, useRouter } from "@/i18n/routing";
 import { useTheme } from "next-themes";
 import { Menu, X, Moon, Sun } from "lucide-react";
+import { useTranslations } from 'next-intl';
+import { LanguageSwitcher } from "./LanguageSwitcher";
 
 export const Header: React.FC = () => {
+    const t = useTranslations('Navigation');
     const pathname = usePathname();
+    const router = useRouter();
     const { theme, setTheme } = useTheme();
     const [mobileOpen, setMobileOpen] = useState(false);
     const [mounted, setMounted] = useState(false);
@@ -20,7 +23,9 @@ export const Header: React.FC = () => {
     const handleScroll = (id: string) => {
         setMobileOpen(false);
         if (pathname !== "/") {
-            window.location.href = `/#${id}`;
+            // This might need adjustment if localized path doesn't match "/" exactly
+            // For now assuming we redirect to home anchor
+            router.push(`/#${id}`);
             return;
         }
         const element = document.getElementById(id);
@@ -41,7 +46,7 @@ export const Header: React.FC = () => {
                                 <div className="w-3 h-3 rounded-full bg-yellow-500 group-hover:bg-yellow-600 transition-colors"></div>
                                 <div className="w-3 h-3 rounded-full bg-green-500 group-hover:bg-green-600 transition-colors"></div>
                             </div>
-                            <span className="font-mono font-bold text-gray-700 dark:text-gray-200 ml-2">
+                            <span className="hidden sm:block font-mono font-bold text-gray-700 dark:text-gray-200 ml-2">
                                 RevOrgs
                                 <span className="animate-blink text-code-green">_</span>
                             </span>
@@ -56,7 +61,7 @@ export const Header: React.FC = () => {
                                 className={`hover:text-code-blue transition-colors ${pathname === "/" ? "text-code-blue" : "text-gray-500"
                                     }`}
                             >
-                                ~/home
+                                {t('home')}
                             </Link>
                             <Link
                                 href="/portfolio"
@@ -65,7 +70,7 @@ export const Header: React.FC = () => {
                                     : "text-gray-500"
                                     }`}
                             >
-                                ./portfolio
+                                {t('portfolio')}
                             </Link>
                             <Link
                                 href="/services"
@@ -74,28 +79,30 @@ export const Header: React.FC = () => {
                                     : "text-gray-500"
                                     }`}
                             >
-                                ./services
+                                {t('services')}
                             </Link>
                             <Link
                                 href="/blog"
                                 className={`hover:text-code-yellow transition-colors ${pathname === "/blog" ? "text-yellow-500" : "text-gray-500"
                                     }`}
                             >
-                                ./blog
+                                {t('blog')}
                             </Link>
                             <Link
                                 href="/manifesto"
                                 className={`hover:text-code-green transition-colors ${pathname === "/manifesto" ? "text-code-green" : "text-gray-500"
                                     }`}
                             >
-                                ./manifesto
+                                {t('manifesto')}
                             </Link>
                             <button
                                 onClick={() => handleScroll("contact")}
                                 className="px-4 py-2 border border-gray-900 dark:border-white rounded hover:bg-gray-900 hover:text-white dark:hover:bg-white dark:hover:text-black transition-all"
                             >
-                                contact.sh
+                                {t('contact')}
                             </button>
+
+                            <LanguageSwitcher />
 
                             <button
                                 onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
@@ -109,6 +116,7 @@ export const Header: React.FC = () => {
 
                     {/* Mobile Menu Button */}
                     <div className="-mr-2 flex md:hidden items-center gap-2">
+                        <LanguageSwitcher />
                         <button
                             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
                             className="p-2 text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors"
@@ -137,7 +145,7 @@ export const Header: React.FC = () => {
                             className={`block py-2 ${pathname === "/" ? "text-code-blue" : "text-gray-500"
                                 }`}
                         >
-                            ~/home
+                            {t('home')}
                         </Link>
                         <Link
                             href="/portfolio"
@@ -145,7 +153,7 @@ export const Header: React.FC = () => {
                             className={`block py-2 ${pathname === "/portfolio" ? "text-code-purple" : "text-gray-500"
                                 }`}
                         >
-                            ./portfolio
+                            {t('portfolio')}
                         </Link>
                         <Link
                             href="/services"
@@ -153,7 +161,7 @@ export const Header: React.FC = () => {
                             className={`block py-2 ${pathname === "/services" ? "text-code-blue" : "text-gray-500"
                                 }`}
                         >
-                            ./services
+                            {t('services')}
                         </Link>
                         <Link
                             href="/blog"
@@ -161,7 +169,7 @@ export const Header: React.FC = () => {
                             className={`block py-2 ${pathname === "/blog" ? "text-yellow-500" : "text-gray-500"
                                 }`}
                         >
-                            ./blog
+                            {t('blog')}
                         </Link>
                         <Link
                             href="/manifesto"
@@ -169,13 +177,13 @@ export const Header: React.FC = () => {
                             className={`block py-2 ${pathname === "/manifesto" ? "text-code-green" : "text-gray-500"
                                 }`}
                         >
-                            ./manifesto
+                            {t('manifesto')}
                         </Link>
                         <button
                             onClick={() => handleScroll("contact")}
                             className="block w-full text-left py-2 px-4 border border-gray-900 dark:border-white rounded hover:bg-gray-900 hover:text-white dark:hover:bg-white dark:hover:text-black transition-all"
                         >
-                            contact.sh
+                            {t('contact')}
                         </button>
                     </div>
                 </div>

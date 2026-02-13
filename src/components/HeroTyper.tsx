@@ -17,7 +17,7 @@ export function HeroTyper() {
     }, []);
 
     return (
-        <h1 className="text-4xl md:text-7xl font-bold tracking-tight mb-2">
+        <h1 className="text-3xl sm:text-4xl md:text-7xl font-bold tracking-tight mb-2">
             <span className="text-gray-400 dark:text-gray-600">
                 &lt;
             </span>

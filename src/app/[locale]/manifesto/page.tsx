@@ -5,10 +5,13 @@ import { motion } from "framer-motion";
 import { History, FileText, Globe } from "lucide-react";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
+import { useTranslations } from "next-intl";
 
 // TODO: Replace with Supabase fetch — `supabase.from('manifesto_entries').select('*').order('sort_order')`
 
 export default function ManifestoPage() {
+    const t = useTranslations("Manifesto");
+
     return (
         <div className="bg-background-light dark:bg-background-dark text-gray-900 dark:text-gray-100 font-mono transition-colors duration-300 min-h-screen flex flex-col">
             <Header />
@@ -20,7 +23,7 @@ export default function ManifestoPage() {
                         animate={{ opacity: 1, x: 0 }}
                         className="text-3xl md:text-5xl font-bold mb-4 flex items-center gap-3"
                     >
-                        <span className="text-code-purple">#</span> About_RevOrgs
+                        <span className="text-code-purple">#</span> {t('title')}
                     </motion.h1>
                     <motion.p
                         initial={{ opacity: 0 }}
@@ -30,8 +33,7 @@ export default function ManifestoPage() {
                     >
                         <span className="text-code-blue">const</span> description ={" "}
                         <span className="text-code-green">
-                            &quot;A deep dive into our history, values, and engineering
-                            culture.&quot;
+                            &quot;{t('description')}&quot;
                         </span>
                         ;
                     </motion.p>
@@ -62,12 +64,10 @@ export default function ManifestoPage() {
                                         <span>2023-10-15</span>
                                     </div>
                                     <h3 className="text-lg font-bold text-gray-900 dark:text-white mt-1">
-                                        Global Expansion
+                                        {t('commits.expansion.title')}
                                     </h3>
                                     <p className="text-sm text-gray-600 dark:text-gray-400 mt-2 leading-relaxed">
-                                        Established partnerships in US and Western Europe. Scaled
-                                        the team to 50+ engineers while maintaining our core
-                                        Moldovan HQ.
+                                        {t('commits.expansion.desc')}
                                     </p>
                                     <div className="flex gap-2 mt-3">
                                         <span className="text-xs bg-gray-200 dark:bg-gray-800 px-2 py-1 rounded text-gray-600 dark:text-gray-300">
@@ -94,12 +94,10 @@ export default function ManifestoPage() {
                                         <span>2021-06-22</span>
                                     </div>
                                     <h3 className="text-lg font-bold text-gray-900 dark:text-white mt-1">
-                                        Next.js Migration
+                                        {t('commits.migration.title')}
                                     </h3>
                                     <p className="text-sm text-gray-600 dark:text-gray-400 mt-2 leading-relaxed">
-                                        Shifted entire stack focus to Next.js and React Server
-                                        Components. Performance metrics improved by 40% across all
-                                        client portfolios.
+                                        {t('commits.migration.desc')}
                                     </p>
                                     <div className="flex gap-2 mt-3">
                                         <span className="text-xs bg-gray-200 dark:bg-gray-800 px-2 py-1 rounded text-gray-600 dark:text-gray-300">
@@ -126,12 +124,10 @@ export default function ManifestoPage() {
                                         <span>2019-03-10</span>
                                     </div>
                                     <h3 className="text-lg font-bold text-gray-900 dark:text-white mt-1">
-                                        Agency Founded
+                                        {t('commits.founded.title')}
                                     </h3>
                                     <p className="text-sm text-gray-600 dark:text-gray-400 mt-2 leading-relaxed">
-                                        RevOrgs initialized in Chișinău, Moldova. A small team of 3
-                                        passionate developers aiming to bring high-quality code to
-                                        the local market.
+                                        {t('commits.founded.desc')}
                                     </p>
                                     <div className="flex gap-2 mt-3">
                                         <span className="text-xs bg-gray-200 dark:bg-gray-800 px-2 py-1 rounded text-gray-600 dark:text-gray-300">
@@ -147,21 +143,17 @@ export default function ManifestoPage() {
                     <div className="flex flex-col space-y-12">
                         <h2 className="text-xl font-bold mb-2 flex items-center gap-2 text-gray-700 dark:text-gray-200">
                             <FileText size={18} className="text-code-blue" />
-                            Core_Principles.md
+                            {t('principles')}
                         </h2>
                         <div className="space-y-10">
                             {/* Principle 1 */}
                             <motion.div whileHover={{ scale: 1.02 }} className="group">
                                 <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-3 flex items-center">
-                                    <span className="text-code-purple mr-2">##</span> Philosophy
+                                    <span className="text-code-purple mr-2">##</span> {t('principlesItems.philosophy.title')}
                                 </h3>
                                 <div className="bg-white dark:bg-terminal-black border border-gray-200 dark:border-gray-800 p-6 rounded shadow-sm hover:border-code-purple transition-colors">
                                     <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed font-mono">
-                                        We believe that{" "}
-                                        <span className="text-code-blue">simplicity</span> is the
-                                        ultimate sophistication. Our code is clean, documented, and
-                                        built to last. We don&apos;t just write software; we craft
-                                        digital assets that appreciate in value over time.
+                                        {t('principlesItems.philosophy.desc')}
                                     </p>
                                     <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-900 text-xs text-gray-500 flex justify-between">
                                         <span>Last edited: 2 days ago</span>
@@ -173,22 +165,11 @@ export default function ManifestoPage() {
                             {/* Principle 2 */}
                             <motion.div whileHover={{ scale: 1.02 }} className="group">
                                 <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-3 flex items-center">
-                                    <span className="text-code-green mr-2">##</span> Engineering
-                                    Excellence
+                                    <span className="text-code-green mr-2">##</span> {t('principlesItems.excellence.title')}
                                 </h3>
                                 <div className="bg-white dark:bg-terminal-black border border-gray-200 dark:border-gray-800 p-6 rounded shadow-sm hover:border-code-green transition-colors">
                                     <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed font-mono">
-                                        <span className="text-code-purple">if</span> (quality &lt;
-                                        100%) <span className="text-code-purple">return</span>{" "}
-                                        false;
-                                        <br />
-                                        <br />
-                                        We enforce strict CI/CD pipelines, 100% test coverage for
-                                        critical paths, and perform rigorous code reviews. Being{" "}
-                                        <span className="font-bold text-gray-900 dark:text-white">
-                                            Moldova web development
-                                        </span>{" "}
-                                        leaders means setting the standard, not just meeting it.
+                                        {t('principlesItems.excellence.desc')}
                                     </p>
                                 </div>
                             </motion.div>
@@ -197,13 +178,11 @@ export default function ManifestoPage() {
                             <motion.div whileHover={{ scale: 1.02 }} className="group">
                                 <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-3 flex items-center">
                                     <span className="text-code-blue mr-2">##</span>{" "}
-                                    Client-Centricity
+                                    {t('principlesItems.client.title')}
                                 </h3>
                                 <div className="bg-white dark:bg-terminal-black border border-gray-200 dark:border-gray-800 p-6 rounded shadow-sm hover:border-code-blue transition-colors">
                                     <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed font-mono">
-                                        Our clients are partners in our repository. We maintain
-                                        transparent communication channels and agile methodologies
-                                        to ensure alignment.
+                                        {t('principlesItems.client.desc')}
                                         <br />
                                         <br />
                                         <span className="text-gray-400 italic">
@@ -221,10 +200,10 @@ export default function ManifestoPage() {
                     <div className="mb-12 text-center">
                         <h2 className="text-2xl font-bold mb-2 flex items-center justify-center gap-2">
                             <Globe size={24} className="text-code-green" />
-                            Global_Reach.svg
+                            {t('globalReach')}
                         </h2>
                         <p className="text-sm text-gray-500 mt-2">
-                            Connecting dots from Chișinău to the World.
+                            NY - MD - SG
                         </p>
                     </div>
                     <div className="relative w-full h-[300px] md:h-[400px] bg-gray-50 dark:bg-gray-900/50 rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden flex items-center justify-center">

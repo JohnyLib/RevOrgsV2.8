@@ -5,15 +5,25 @@ import { Footer } from "@/components/Footer";
 import { TerminalWindow } from "@/components/TerminalWindow";
 import { Header } from "@/components/Header";
 import { ContactForm } from "@/components/ContactForm";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { getServices } from "@/app/actions/services";
+import { getTranslations } from 'next-intl/server';
 import { getAllProjectSlugs } from "@/app/actions/projects";
 
 // Client component for typing effect to keep mostly server-side
 import { HeroTyper } from "@/components/HeroTyper";
 
-export default async function HomePage() {
+export default async function HomePage({
+  params
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'Hero' });
+  const tCommon = await getTranslations({ locale, namespace: 'Common' });
+
   // Fetch dynamic data
+  // Note: Actions might need to be updated to support locale if content is localized in DB
   const services = await getServices();
   const projects = await getAllProjectSlugs();
   const projectCount = projects ? projects.length : 0;
@@ -39,7 +49,7 @@ export default async function HomePage() {
           <div className="inline-block relative">
             <HeroTyper />
             <p className="text-xs md:text-sm text-gray-500 mt-2 uppercase tracking-widest">
-              Moldovan Web Agency
+              {t('subtitle')}
             </p>
           </div>
 
@@ -48,14 +58,14 @@ export default async function HomePage() {
           >
             <span className="text-code-blue">const</span> mission ={" "}
             <span className="text-code-green">
-              &quot;Crafting digital experiences with precision.&quot;
+              &quot;{t('title')}&quot;
             </span>
             ;
           </div>
 
           <div className="mt-8 animate-fade-in-up delay-200">
             <Link href="/#contact" className="group relative inline-flex items-center justify-center px-8 py-3 text-base font-medium text-white bg-black dark:bg-white dark:text-black border border-transparent rounded hover:bg-gray-800 dark:hover:bg-gray-200 transition-all duration-200 ease-in-out">
-              <span className="mr-2">Start Project</span>
+              <span className="mr-2">{tCommon('getStarted')}</span>
               <Terminal
                 size={18}
                 className="group-hover:translate-x-1 transition-transform"
@@ -151,7 +161,7 @@ export default async function HomePage() {
                     {service.short_description || "Premium digital service."}
                   </p>
                   <div className="flex items-center text-xs font-bold uppercase tracking-wider text-gray-400 group-hover:text-white transition-colors">
-                    Learn More <ArrowRight size={12} className="ml-1" />
+                    {tCommon('learnMore')} <ArrowRight size={12} className="ml-1" />
                   </div>
                 </Link>
               ))

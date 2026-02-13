@@ -5,45 +5,68 @@ import { getAllServiceSlugs } from '@/app/actions/services'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.revorgs.xyz'
+    const locales = ['ro', 'ru'];
 
     // Static routes
-    const routes = [
+    const staticRoutes = [
         '',
         '/portfolio',
         '/blog',
         '/services',
         '/manifesto',
-    ].map((route) => ({
-        url: `${baseUrl}${route}`,
-        lastModified: new Date(),
-        changeFrequency: 'weekly' as const,
-        priority: route === '' ? 1 : 0.8,
-    }))
+    ]
+
+    const routes: MetadataRoute.Sitemap = [];
+
+    // Generate static routes for each locale
+    staticRoutes.forEach(route => {
+        locales.forEach(locale => {
+            routes.push({
+                url: `${baseUrl}/${locale}${route}`,
+                lastModified: new Date(),
+                changeFrequency: 'weekly' as const,
+                priority: route === '' ? 1 : 0.8,
+            })
+        })
+    })
 
     // Dynamic routes
     const projects = await getAllProjectSlugs()
-    const projectRoutes = projects.map((project) => ({
-        url: `${baseUrl}/portfolio/${project.slug}`,
-        lastModified: new Date(project.updated_at),
-        changeFrequency: 'monthly' as const,
-        priority: 0.7,
-    }))
+    projects.forEach((project) => {
+        locales.forEach(locale => {
+            routes.push({
+                url: `${baseUrl}/${locale}/portfolio/${project.slug}`,
+                lastModified: new Date(project.updated_at),
+                changeFrequency: 'monthly' as const,
+                priority: 0.7,
+            })
+        })
+    })
 
     const posts = await getAllBlogPostSlugs()
-    const blogRoutes = posts.map((post) => ({
-        url: `${baseUrl}/blog/${post.slug}`,
-        lastModified: new Date(post.updated_at),
-        changeFrequency: 'weekly' as const,
-        priority: 0.8,
-    }))
+    posts.forEach((post) => {
+        locales.forEach(locale => {
+            routes.push({
+                url: `${baseUrl}/${locale}/blog/${post.slug}`,
+                lastModified: new Date(post.updated_at),
+                changeFrequency: 'weekly' as const,
+                priority: 0.8,
+            })
+        })
+    })
+
 
     const services = await getAllServiceSlugs()
-    const serviceRoutes = services.map((service) => ({
-        url: `${baseUrl}/services/${service.slug}`,
-        lastModified: new Date(service.updated_at),
-        changeFrequency: 'monthly' as const,
-        priority: 0.9,
-    }))
+    services.forEach((service) => {
+        locales.forEach(locale => {
+            routes.push({
+                url: `${baseUrl}/${locale}/services/${service.slug}`,
+                lastModified: new Date(service.updated_at),
+                changeFrequency: 'monthly' as const,
+                priority: 0.9,
+            })
+        })
+    })
 
-    return [...routes, ...projectRoutes, ...blogRoutes, ...serviceRoutes]
+    return routes
 }
