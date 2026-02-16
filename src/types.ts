@@ -27,8 +27,8 @@ export interface Project {
     price: string | null; // metrics? or kept as specific field if added to DB, schema didn't have price but had metrics jsonb. I'll map from metrics if possible or just null.
 
     // UI/Derived fields (ProjectList)
+    status?: 'deployed' | 'in-progress' | 'planned';
     filename?: string;
-    status?: string;
     language?: string | null;
     framework?: string | null;
     performance?: number;
@@ -47,6 +47,8 @@ export interface ManifestoItem {
     tags: string[];
     color: 'blue' | 'purple' | 'green' | 'orange';
 }
+
+export type SectionName = 'About' | 'Experience' | 'Projects' | 'Contact';
 
 export interface Service {
     id: string;

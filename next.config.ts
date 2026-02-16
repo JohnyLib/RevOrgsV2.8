@@ -19,6 +19,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "legalgrup.md",
       },
+      {
+        protocol: "https",
+        hostname: "www.benlcollins.com",
+      },
     ],
   },
 };

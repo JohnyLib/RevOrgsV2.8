@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { Trash2, Edit2, ExternalLink, Github, Building2, DollarSign } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
-import { ProjectForm } from "./ProjectForm";
 import { useRouter } from "next/navigation";
 
 // Define interface matching Supabase table and ProjectForm
@@ -30,7 +29,6 @@ interface ProjectItemProps {
 
 export function ProjectItem({ project }: ProjectItemProps) {
     const router = useRouter();
-    const [isEditing, setIsEditing] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
     const supabase = createClient();
 
@@ -52,11 +50,6 @@ export function ProjectItem({ project }: ProjectItemProps) {
         } finally {
             setIsDeleting(false);
         }
-    };
-
-    const handleSuccess = () => {
-        setIsEditing(false);
-        router.refresh();
     };
 
     // Extract extra data from metrics if available
@@ -152,7 +145,7 @@ export function ProjectItem({ project }: ProjectItemProps) {
 
                         <div className="flex gap-2">
                             <button
-                                onClick={() => setIsEditing(true)}
+                                onClick={() => router.push(`/admin/portfolio/${project.id}/edit`)}
                                 className="text-gray-400 hover:text-code-blue transition-colors p-1"
                                 title="Edit"
                             >
@@ -170,14 +163,6 @@ export function ProjectItem({ project }: ProjectItemProps) {
                     </div>
                 </div>
             </div>
-
-            {isEditing && (
-                <ProjectForm
-                    initialData={project as any} // Cast because ProjectForm might expect slightly different props, but we will fix ProjectForm next
-                    onClose={() => setIsEditing(false)}
-                    onSuccess={handleSuccess}
-                />
-            )}
         </>
     );
 }

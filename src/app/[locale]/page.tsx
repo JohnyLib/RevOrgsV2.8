@@ -5,6 +5,7 @@ import { Footer } from "@/components/Footer";
 import { TerminalWindow } from "@/components/TerminalWindow";
 import { Header } from "@/components/Header";
 import { ContactForm } from "@/components/ContactForm";
+import PricingCalculator from "@/components/PricingCalculator";
 import { Link } from "@/i18n/routing";
 import { getServices } from "@/app/actions/services";
 import { getTranslations } from 'next-intl/server';
@@ -187,6 +188,11 @@ export default async function HomePage({
             </Link>
           </div>
         </section>
+
+        {/* Pricing Calculator Section */}
+        <div id="pricing">
+          <PricingCalculator />
+        </div>
 
         {/* Testimonials */}
         <section

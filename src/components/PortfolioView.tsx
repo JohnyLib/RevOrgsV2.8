@@ -1,7 +1,7 @@
 import React from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { ProjectList } from "@/components/ProjectList";
+import { ProjectGrid } from "@/components/ProjectGrid";
 import { Pagination } from "@/components/Pagination";
 import { LinkCategoryFilter } from "@/components/LinkCategoryFilter";
 import { LinkTechnologyFilter } from "@/components/LinkTechnologyFilter";
@@ -50,59 +50,43 @@ export function PortfolioView({
                             categories={categories}
                             currentCategorySlug={currentCategorySlug}
                             getHref={(slug) => {
-                                // If picking "All" (slug is null)
                                 if (!slug) {
-                                    // Reset Category. Keep existing technology if any?
-                                    // Note: If we reset category, we go to /portfolio (or /portfolio/technology/XYZ)
-                                    // BUT, technology/XYZ route does NOT support picking a category easily if logic isn't bidirectional.
-                                    // For simplicity and standard behavior, "All Categories" usually resets to root or just tech.
                                     if (currentTechnologySlug) {
                                         return `/portfolio/technology/${currentTechnologySlug}`;
                                     }
                                     return "/portfolio";
                                 }
-
-                                // Selecting a category
-                                // If we have a technology selected, we want to go to /portfolio/category/SLUG/technology/TECH
                                 if (currentTechnologySlug) {
                                     return `/portfolio/category/${slug}/technology/${currentTechnologySlug}`;
                                 }
-                                // No technology, just category
                                 return `/portfolio/category/${slug}`;
                             }}
                         />
                         <LinkTechnologyFilter
                             currentTechnologySlug={currentTechnologySlug}
                             getHref={(slug) => {
-                                // Picking "Any Technology" (slug is null)
                                 if (!slug) {
-                                    // Reset Technology. Keep Category if any.
                                     if (currentCategorySlug) {
                                         return `/portfolio/category/${currentCategorySlug}`;
                                     }
                                     return "/portfolio";
                                 }
-
-                                // Selecting a specific technology
                                 if (currentCategorySlug) {
-                                    // If we have a category, append technology
                                     return `/portfolio/category/${currentCategorySlug}/technology/${slug}`;
                                 }
-                                // No category, just technology
                                 return `/portfolio/technology/${slug}`;
                             }}
                         />
                     </div>
                 </header>
 
-                <ProjectList projects={projects} />
+                <ProjectGrid projects={projects} />
 
                 <div className="mt-16 border-t border-gray-200 dark:border-gray-800 pt-8 flex justify-between items-center text-sm">
                     <div className="text-gray-500">
                         Showing {(currentPage - 1) * limit + 1}-
                         {Math.min(currentPage * limit, totalCount)} of {totalCount} projects
                     </div>
-                    {/* Pagination will use query params (?page=2) which works fine with dynamic route base */}
                     <Pagination totalPages={totalPages} currentPage={currentPage} />
                 </div>
             </main>
