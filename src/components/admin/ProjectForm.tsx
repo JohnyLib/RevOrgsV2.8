@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { Upload, X, Plus, Loader2 } from "lucide-react";
 import Image from "next/image";
-import { createProject } from "@/app/actions/admin-projects";
+import { createProject } from "../../app/actions/admin-projects";
 
 export function AdminProjectForm() {
     const [isLoading, setIsLoading] = useState(false);
@@ -46,10 +46,11 @@ export function AdminProjectForm() {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        const form = e.currentTarget; // Capture form reference
         setIsLoading(true);
         setMessage(null);
 
-        const formData = new FormData(e.currentTarget);
+        const formData = new FormData(form);
 
         // 1. Upload Image if exists
         let imageUrl = "";
@@ -89,7 +90,7 @@ export function AdminProjectForm() {
             if (result.success) {
                 setMessage({ type: 'success', text: "Project created successfully!" });
                 // Reset form
-                e.currentTarget.reset();
+                form.reset();
                 setImageFile(null);
                 setImagePreview(null);
                 setTechnologies([]);
