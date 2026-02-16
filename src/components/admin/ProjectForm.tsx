@@ -2,21 +2,24 @@
 
 import React, { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { Upload, X, Plus, Loader2 } from "lucide-react";
+import { Upload, X, Loader2, Github } from "lucide-react";
 import Image from "next/image";
 import { createProject } from "../../app/actions/admin-projects";
+import { MultiSelect } from "@/components/ui/MultiSelect";
 
-export function AdminProjectForm() {
+interface AdminProjectFormProps {
+    availableTechnologies?: { id: string; name: string }[];
+    availableCategories?: { id: string; name: string }[];
+}
+
+export function AdminProjectForm({ availableTechnologies = [], availableCategories = [] }: AdminProjectFormProps) {
     const [isLoading, setIsLoading] = useState(false);
     const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
+
     const [technologies, setTechnologies] = useState<string[]>([]);
     const [categories, setCategories] = useState<string[]>([]);
-
-    // Simple state for inputs
-    const [techInput, setTechInput] = useState("");
-    const [catInput, setCatInput] = useState("");
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -27,20 +30,6 @@ export function AdminProjectForm() {
                 setImagePreview(reader.result as string);
             };
             reader.readAsDataURL(file);
-        }
-    };
-
-    const addTech = () => {
-        if (techInput.trim() && !technologies.includes(techInput.trim())) {
-            setTechnologies([...technologies, techInput.trim()]);
-            setTechInput("");
-        }
-    };
-
-    const addCat = () => {
-        if (catInput.trim() && !categories.includes(catInput.trim())) {
-            setCategories([...categories, catInput.trim()]);
-            setCatInput("");
         }
     };
 
@@ -133,6 +122,12 @@ export function AdminProjectForm() {
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Project URL</label>
                         <input name="project_url" type="url" className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-black text-gray-900 dark:text-white" placeholder="https://" />
                     </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
+                            <Github size={16} /> GitHub URL
+                        </label>
+                        <input name="repo_url" type="url" className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-black text-gray-900 dark:text-white" placeholder="https://github.com/..." />
+                    </div>
                 </div>
 
                 {/* Right Column: Image */}
@@ -184,53 +179,23 @@ export function AdminProjectForm() {
 
             {/* Arrays */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Technologies</label>
-                    <div className="flex gap-2 mb-2">
-                        <input
-                            value={techInput}
-                            onChange={(e) => setTechInput(e.target.value)}
-                            onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addTech())}
-                            className="flex-grow px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-black text-gray-900 dark:text-white"
-                            placeholder="e.g. Next.js"
-                        />
-                        <button type="button" onClick={addTech} className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700">
-                            <Plus size={20} />
-                        </button>
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                        {technologies.map(t => (
-                            <span key={t} className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 text-sm">
-                                {t}
-                                <X size={14} className="cursor-pointer hover:text-indigo-900 dark:hover:text-white" onClick={() => setTechnologies(technologies.filter(x => x !== t))} />
-                            </span>
-                        ))}
-                    </div>
-                </div>
+                <MultiSelect
+                    label="Technologies"
+                    options={availableTechnologies}
+                    selected={technologies}
+                    onChange={setTechnologies}
+                    allowCustom={true}
+                    placeholder="Select or type..."
+                />
 
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Categories</label>
-                    <div className="flex gap-2 mb-2">
-                        <input
-                            value={catInput}
-                            onChange={(e) => setCatInput(e.target.value)}
-                            onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addCat())}
-                            className="flex-grow px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-black text-gray-900 dark:text-white"
-                            placeholder="e.g. Web Development"
-                        />
-                        <button type="button" onClick={addCat} className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700">
-                            <Plus size={20} />
-                        </button>
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                        {categories.map(c => (
-                            <span key={c} className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 text-sm">
-                                {c}
-                                <X size={14} className="cursor-pointer hover:text-purple-900 dark:hover:text-white" onClick={() => setCategories(categories.filter(x => x !== c))} />
-                            </span>
-                        ))}
-                    </div>
-                </div>
+                <MultiSelect
+                    label="Categories"
+                    options={availableCategories}
+                    selected={categories}
+                    onChange={setCategories}
+                    allowCustom={true}
+                    placeholder="Select or type..."
+                />
             </div>
 
             <button

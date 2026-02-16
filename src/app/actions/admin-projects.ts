@@ -11,6 +11,7 @@ export async function createProject(formData: FormData) {
         const full_description = formData.get("full_description") as string;
         const client_name = formData.get("client_name") as string;
         const project_url = formData.get("project_url") as string;
+        const repo_url = formData.get("repo_url") as string;
         const image_url = formData.get("image_url") as string;
 
         const technologies: string[] = JSON.parse(formData.get("technologies") as string || "[]");
@@ -28,6 +29,7 @@ export async function createProject(formData: FormData) {
                 full_description,
                 client_name,
                 project_url,
+                repo_url, // Add repo_url
                 cover_image: image_url,
                 is_published: true,
                 is_featured: false,

@@ -23,6 +23,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "www.benlcollins.com",
       },
+      {
+        protocol: "https",
+        hostname: "**.supabase.co",
+      },
     ],
   },
 };
